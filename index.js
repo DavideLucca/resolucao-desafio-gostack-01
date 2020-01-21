@@ -25,11 +25,22 @@ app.get('/projects', (req, res) => {
 
 // Rota que altera o título do projeto
 app.put('/projects/:id', (req, res) => {
-    const id = req.params.id;
-    const title = req.body.title;
-    projects[id] = title;
+    const { id } = req.params;
+    const { title } = req.body;
+    
+    const project = projects.find(x => x.id === id);
 
-    return res.json(projects);
+    project.title = title;
+
+    return res.json(project);
+});
+
+// Rota que irá deletar o projeto pelo id
+app.delete('/projects/:id', (req, res) => {
+    const { id } = req.params;
+    const projectIndex = projects.findIndex(x => x.id == id);
+    projects.splice(projectIndex, 1);
+    return res.json({ message: `Projeto de id ${id} foi apagado.` });
 });
 
 app.listen(3000);
